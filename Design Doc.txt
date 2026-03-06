@@ -1,0 +1,49 @@
+ARCHITECTURE OVERVIEW
+The system uses an automated CI/CD pipeline to build, test, containerize, deploy, and monitor a Flask application on a Kubernetes cluster.
+
+SYSTEM FLOW
+1. Developer pushes code to the Git repository
+2. CI pipeline triggers automatically
+3. Application is built and tested
+4. Docker image is created and pushed to registry
+5. Infrastructure is provisioned using Terraform
+6. Servers are configured using Ansible
+7. Application is deployed to Kubernetes
+8. Prometheus collects metrics
+9. Grafana visualizes system health
+
+COMPONENTS
+
+SOURCE CONTROL
+- GitHub or GitLab repository
+- Stores application source code and pipeline configuration
+
+CI/CD PIPELINE
+- Jenkins or GitLab CI/CD
+- Responsible for build, test, image creation, and deployment automation
+
+CONTAINERIZATION
+- Docker
+- Provides consistent runtime environment across stages
+
+INFRASTRUCTURE LAYER
+- Terraform provisions cloud infrastructure
+- Ansible configures servers and installs dependencies
+
+ORCHESTRATION
+- Kubernetes manages application deployment, scaling, and self-healing
+
+MONITORING AND OBSERVABILITY
+- Prometheus scrapes system and application metrics
+- Grafana displays dashboards for monitoring
+
+DEPLOYMENT STRATEGY
+- Rolling updates to avoid downtime
+- Health checks to validate deployments
+- Basic rollback on failure
+
+DESIGN PRINCIPLES
+- Automation-first approach
+- Infrastructure as code
+- Stateless application design
+- Observability by default

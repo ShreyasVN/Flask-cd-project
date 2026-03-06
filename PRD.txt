@@ -1,0 +1,35 @@
+PROJECT TITLE
+Automated CI/CD Platform for Flask Application Deployment
+
+PROBLEM STATEMENT
+Manual deployment of web applications causes inconsistent environments, deployment failures, slow release cycles, and lack of system visibility. This project builds a fully automated CI/CD pipeline to enable reliable, repeatable, and observable deployments for a Flask application.
+
+GOALS AND OBJECTIVES
+- Automate build, test, and deployment workflows
+- Ensure environment consistency using Infrastructure as Code
+- Enable scalable deployments using Kubernetes
+- Provide real-time monitoring and observability
+
+TARGET USERS
+- Developers deploying Flask applications
+- DevOps engineers managing CI/CD pipelines
+- Students and freshers learning production-grade DevOps practices
+
+KEY FEATURES
+- Automated CI/CD pipeline triggered on code commits
+- Dockerized Flask application
+- Kubernetes-based deployment
+- Infrastructure provisioning using Terraform
+- Configuration management using Ansible
+- Monitoring using Prometheus and Grafana
+
+OUT OF SCOPE
+- Advanced security hardening (WAF, IAM fine-grained policies)
+- Multi-cloud deployments
+- Service mesh or complex microservices architecture
+
+SUCCESS METRICS
+- Zero manual deployment steps
+- Successful deployment on each valid commit
+- Application availability after deployment
+- System metrics visible on Grafana dashboards

@@ -1,0 +1,33 @@
+D:\Flask-cd-project\
+│
+├── app/                                    # Flask Application Source
+│   ├── app.py
+│   ├── requirements.txt
+│   └── test_app.py
+│
+├── docker/                                 # Container Configuration
+│   └── Dockerfile
+│
+├── k8s/                                    # Kubernetes Manifests
+│   ├── deployment.yaml
+│   └── service.yaml
+│
+├── infra/                                  # Infrastructure as Code
+│   ├── terraform/
+│   │   └── main.tf
+│   └── ansible/
+│       ├── playbook.yml
+│       └── inventory.ini
+│
+├── images/                                 # Generated Visual Assets
+│   ├── CI-CD Pipeline Workflow.png
+│   ├── End-to-End DevOps Lifecycle.png
+│   ├── Infrastructure as Code Concept.png
+│   ├── Kubernetes Deployment & Scaling View.png
+│   ├── Master Architecture Diagram.png
+│   ├── Minimal README Diagram.png
+│   ├── Monitoring & Observability Dashboard.png
+│   └── DevOps Automation Concept Image.png
+│
+├── Jenkinsfile                             # CI/CD Pipeline Definition
+└── README.md                               # Project Documentation

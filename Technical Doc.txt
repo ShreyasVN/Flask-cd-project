@@ -1,0 +1,60 @@
+TECH STACK
+Backend: Flask (Python)
+CI/CD: Jenkins, GitLab CI/CD
+Containerization: Docker
+Orchestration: Kubernetes
+Infrastructure as Code: Terraform
+Configuration Management: Ansible
+Monitoring: Prometheus, Grafana
+Cloud Platform: AWS
+
+CI/CD PIPELINE STAGES
+
+STAGE 1: CODE CHECKOUT
+- Pull latest source code from repository
+
+STAGE 2: BUILD AND TEST
+- Install dependencies
+- Run unit tests
+- Fail pipeline on test failure
+
+STAGE 3: DOCKER BUILD
+- Build Docker image for Flask application
+- Tag image using commit hash
+
+STAGE 4: IMAGE PUSH
+- Push Docker image to container registry
+
+STAGE 5: INFRASTRUCTURE PROVISIONING
+- Terraform provisions required infrastructure
+- Ansible installs Docker and Kubernetes dependencies
+
+STAGE 6: DEPLOYMENT
+- Kubernetes deploys application
+- Rolling update strategy used
+
+STAGE 7: MONITORING VALIDATION
+- Prometheus scrapes metrics
+- Grafana dashboards verify application health
+
+KUBERNETES CONFIGURATION
+- Deployment defines replicas and container image
+- Service exposes the application
+- ConfigMaps and Secrets store environment variables
+
+MONITORING SETUP
+- Prometheus deployed inside Kubernetes cluster
+- Flask application exposes /metrics endpoint
+- Grafana dashboards show CPU, memory, pod health, and request metrics
+
+ASSUMPTIONS
+- Single region deployment
+- Moderate traffic load
+- Learning-focused but production-style setup
+
+FUTURE ENHANCEMENTS
+- Horizontal Pod Autoscaling
+- Helm charts
+- Canary deployments
+- Security scanning in CI
+- Advanced secret management
