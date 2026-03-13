@@ -6,30 +6,13 @@
 ![Kubernetes](https://img.shields.io/badge/kubernetes-v1.26-blue)
 ![Terraform](https://img.shields.io/badge/terraform-v1.4-purple)
 
-![Flask Application CI/CD Automation](images/Minimal%20README%20Diagram.jpg)
-
 This project implements a production-grade CI/CD pipeline to automate the build, test, containerization, infrastructure provisioning, and deployment of a Flask application on Kubernetes. It integrates monitoring using Prometheus and Grafana to ensure high availability and observability.
-
----
-
-## 📋 Table of Contents
-- [Architecture Overview](#architecture-overview)
-- [Infrastructure as Code](#infrastructure-as-code)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Project Structure](#project-structure)
-- [Setup Instructions](#setup-instructions)
-- [Pipeline Stages](#pipeline-stages)
-- [Kubernetes Deployment Strategy](#kubernetes-deployment-strategy)
-- [Monitoring & Observability](#monitoring--observability)
 
 ---
 
 ## 🏗️ Architecture Overview
 
 The system follows a complete Cloud-Native DevOps lifecycle, moving from code development to automated deployment and monitoring.
-
-![Master Architecture Diagram](images/Master%20Architecture%20Diagram.jpg)
 
 ### Workflow Description
 1.  **Code & Build:** Developers push code to Git, triggering the Jenkins pipeline.
@@ -43,8 +26,6 @@ The system follows a complete Cloud-Native DevOps lifecycle, moving from code de
 ## ⚙️ Infrastructure as Code (IaC)
 
 We use a "Code-First" approach to infrastructure. Terraform handles the provisioning of the cloud layer (Network, VMs), while Ansible handles the configuration management (Dependencies, Docker, K8s tools).
-
-![Infrastructure as Code Flow](images/Infrastructure%20as%20Code%20Concept.jpg)
 
 ---
 
@@ -130,7 +111,7 @@ kubectl apply -f [https://raw.githubusercontent.com/coreos/flannel/master/Docume
 
 ## 🔄 Pipeline Stages
 
-The CI/CD pipeline is designed to be fail-fast and automated.
+The CI/CD pipeline is designed to be fail-fast and automated:
 
 1. **Code Commit:** Triggered by Git push.
 2. **Build & Test:** Runs `pytest` and linting checks.
@@ -147,7 +128,7 @@ The application utilizes a **Rolling Update** strategy to ensure zero downtime d
 
 * **Ingress Controller:** Routes external traffic to the service.
 * **Load Balancer:** Distributes traffic across active Pods.
-* **Rolling Update:** Ensures V2 pods are healthy before terminating V1 pods.
+* **Health Checks:** Liveness and Readiness probes ensure traffic only hits healthy pods.
 
 ---
 
@@ -157,17 +138,15 @@ Real-time monitoring is achieved via Prometheus (metrics collection) and Grafana
 
 ### Key Metrics Monitored:
 
-* **System CPU & Memory Usage:** Cluster resource health.
-* **Application Request Rate (RPS):** Traffic load.
-* **Error Rates:** 4xx/5xx HTTP errors.
-* **Pod Health:** Running vs Pending pod status.
+* **System Resource Health:** CPU & Memory usage.
+* **Traffic Load:** Application Request Rate (RPS).
+* **Reliability:** 4xx/5xx HTTP error tracking.
+* **Orchestration Health:** Pod Running vs Pending status.
 
 ---
 
 ## 👨‍💻 Author
 
-**Shreyas N-DevOps Engineer**
-
-```
+**Shreyas N - DevOps Engineer**
 
 ```
