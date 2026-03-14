@@ -1,152 +1,244 @@
-```markdown
-# Automated CI/CD Platform for Flask Application Deployment
+# Enterprise CI/CD Pipeline & Kubernetes Deployment on AWS
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Python](https://img.shields.io/badge/python-3.9-blue)
 ![Kubernetes](https://img.shields.io/badge/kubernetes-v1.26-blue)
 ![Terraform](https://img.shields.io/badge/terraform-v1.4-purple)
+![AWS](https://img.shields.io/badge/AWS-Cloud_Infrastructure-orange)
 
-This project implements a production-grade CI/CD pipeline to automate the build, test, containerization, infrastructure provisioning, and deployment of a Flask application on Kubernetes. It integrates monitoring using Prometheus and Grafana to ensure high availability and observability.
-
----
-
-## 🏗️ Architecture Overview
-
-The system follows a complete Cloud-Native DevOps lifecycle, moving from code development to automated deployment and monitoring.
-
-### Workflow Description
-1.  **Code & Build:** Developers push code to Git, triggering the Jenkins pipeline.
-2.  **Containerization:** Docker builds the image and pushes it to the Container Registry.
-3.  **Infrastructure:** Terraform provisions AWS resources; Ansible configures the nodes.
-4.  **Orchestration:** Kubernetes deploys the application pods and services.
-5.  **Observability:** Prometheus scrapes metrics, visualized by Grafana.
+A production-oriented DevOps pipeline that automates the build, test, containerization, and deployment of a Python Flask application onto a Kubernetes cluster hosted on AWS.  
+This project demonstrates **Infrastructure as Code (IaC), container orchestration, CI/CD automation, and system observability**.
 
 ---
 
-## ⚙️ Infrastructure as Code (IaC)
+# 🏗 Architecture Overview
 
-We use a "Code-First" approach to infrastructure. Terraform handles the provisioning of the cloud layer (Network, VMs), while Ansible handles the configuration management (Dependencies, Docker, K8s tools).
+This system implements a **complete DevOps lifecycle** from code commit to monitored deployment.
 
----
+### Pipeline Workflow
 
-## 🛠 Tech Stack
+Developer Push (GitHub) 
+↓ 
+Jenkins Pipeline Trigger 
+↓ 
+Code Quality Checks (Lint + Tests) 
+↓ 
+Docker Image Build 
+↓ 
+Push to Container Registry 
+↓ 
+Terraform Provision AWS Infrastructure 
+↓ 
+Ansible Configure Kubernetes Nodes 
+↓ 
+Kubernetes Deployment (Rolling Update) 
+↓ 
+Prometheus Metrics Collection 
+↓ 
+Grafana Monitoring Dashboard
 
-| Category | Tools | Description |
-|----------|-------|-------------|
-| **Backend** | Flask (Python) | REST API with `/health` and `/metrics` endpoints. |
-| **Containerization** | Docker | Container image creation and management. |
-| **Orchestration** | Kubernetes | Cluster management for container deployment. |
-| **CI/CD** | Jenkins | Automated pipeline for building, testing, and deploying. |
-| **IaC** | Terraform | AWS EC2 provisioning. |
-| **Config Mgmt** | Ansible | Configuration of servers and K8s dependencies. |
-| **Monitoring** | Prometheus, Grafana | Metrics scraping and visualization. |
-
----
-
-## 📁 Project Structure
-
-```text
-flask-cd-project/
-├── app/                          # Flask Application Source
-│   ├── app.py                    # Main application logic
-│   ├── requirements.txt          # Python dependencies
-│   └── test_app.py               # Unit tests
-├── docker/                       # Container Configuration
-│   └── Dockerfile                # Image build definition
-├── k8s/                          # Kubernetes Manifests
-│   ├── deployment.yaml           # Deployment config
-│   └── service.yaml              # Service config
-├── infra/                        # Infrastructure as Code
-│   ├── terraform/                # AWS Provisioning
-│   └── ansible/                  # Server Configuration
-├── images/                       # Architecture Diagrams
-├── Jenkinsfile                   # CI/CD Pipeline Definition
-└── README.md                     # Project Documentation
-
-```
+This workflow ensures **fully automated deployments with minimal manual intervention**.
 
 ---
 
-## 🚀 Setup Instructions
+# ☁ Infrastructure as Code Strategy
 
-### 1. Local App Testing
+The infrastructure follows a **code-first immutable infrastructure approach**.
 
-```bash
-cd app
-pip install -r requirements.txt
-python app.py
-# Verify at http://localhost:5000
-pytest test_app.py
+### Terraform
+Terraform is used to provision AWS infrastructure:
 
-```
+- EC2 instances
+- Security groups
+- Networking configuration
 
-### 2. Infrastructure Provisioning
+### Ansible
+
+Ansible automates server configuration:
+
+- Docker installation
+- Kubernetes cluster setup
+- node configuration
+
+This ensures **consistent infrastructure provisioning across environments**.
+
+---
+
+# ⚙ Tech Stack
+
+| Domain | Technology | Implementation |
+|------|-------------|----------------|
+| Cloud Provider | AWS | EC2, Security Groups |
+| Infrastructure as Code | Terraform | Cloud resource provisioning |
+| Configuration Management | Ansible | Server configuration |
+| Containerization | Docker | Flask app container |
+| Orchestration | Kubernetes | Cluster deployment |
+| CI/CD | Jenkins | Pipeline automation |
+| Monitoring | Prometheus + Grafana | Metrics collection & visualization |
+| Application | Python / Flask | REST API service |
+
+---
+
+# 🚀 Deployment Runbook
+
+### 1. Provision Infrastructure
+
+Navigate to the Terraform directory and provision infrastructure.
 
 ```bash
 cd infra/terraform
 terraform init
+terraform plan
 terraform apply -auto-approve
 
-```
 
-### 3. Configuration Management
+---
 
-```bash
+2. Configure Servers
+
+Use Ansible to bootstrap the infrastructure.
+
 cd ../ansible
 ansible-playbook -i inventory.ini playbook.yml
 
-```
+This installs:
 
-### 4. Kubernetes Initialization
+Docker
 
-Run the following on the **Master Node**:
+Kubernetes dependencies
 
-```bash
+cluster configuration tools
+
+
+
+---
+
+3. Initialize Kubernetes Cluster
+
+Run on the master node:
+
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
-kubectl apply -f [https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml](https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml)
 
-```
+Install the networking layer:
 
----
+kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
-## 🔄 Pipeline Stages
-
-The CI/CD pipeline is designed to be fail-fast and automated:
-
-1. **Code Commit:** Triggered by Git push.
-2. **Build & Test:** Runs `pytest` and linting checks.
-3. **Docker Build:** Creates the container image.
-4. **Image Push:** Uploads artifact to Registry.
-5. **Kubernetes Deploy:** Updates the cluster manifest.
-6. **Monitoring:** Validates health metrics.
 
 ---
 
-## ☸️ Kubernetes Deployment Strategy
+☸ Kubernetes Deployment Strategy
 
-The application utilizes a **Rolling Update** strategy to ensure zero downtime during deployments.
+To ensure high availability and zero downtime, the deployment uses:
 
-* **Ingress Controller:** Routes external traffic to the service.
-* **Load Balancer:** Distributes traffic across active Pods.
-* **Health Checks:** Liveness and Readiness probes ensure traffic only hits healthy pods.
+Rolling Updates
+
+Gradually replaces pods without stopping the application.
+
+Health Probes
+
+Liveness probe detects failing containers
+
+Readiness probe ensures traffic is routed only to healthy pods
+
+
+Load Distribution
+
+Kubernetes services balance traffic across running pods.
+
 
 ---
 
-## 📊 Monitoring & Observability
+📊 Observability & Monitoring
 
-Real-time monitoring is achieved via Prometheus (metrics collection) and Grafana (visualization).
+Prometheus continuously collects cluster metrics including:
 
-### Key Metrics Monitored:
+CPU usage
 
-* **System Resource Health:** CPU & Memory usage.
-* **Traffic Load:** Application Request Rate (RPS).
-* **Reliability:** 4xx/5xx HTTP error tracking.
-* **Orchestration Health:** Pod Running vs Pending status.
+memory utilization
+
+network traffic
+
+application request latency
+
+
+Grafana dashboards visualize:
+
+resource utilization
+
+pod health
+
+request throughput
+
+error rates
+
+
+This enables real-time system visibility and troubleshooting.
+
 
 ---
 
-## 👨‍💻 Author
+📂 Project Structure
 
-**Shreyas N - DevOps Engineer**
+ci-cd-kubernetes-pipeline/
+│
+├── app/                 # Flask application
+│   └── app.py
+│
+├── infra/
+│   └── terraform/       # Infrastructure provisioning
+│
+├── ansible/             # Server configuration
+│
+├── k8s/                 # Kubernetes manifests
+│
+├── monitoring/          # Prometheus + Grafana configs
+│
+├── Jenkinsfile          # CI/CD pipeline definition
+│
+└── docker/              # Docker configuration
 
-```
+
+---
+
+📈 Key Learning Outcomes
+
+This project demonstrates practical experience with:
+
+Infrastructure as Code using Terraform
+
+Configuration automation using Ansible
+
+Container orchestration using Kubernetes
+
+Automated CI/CD pipelines using Jenkins
+
+Containerized application deployment with Docker
+
+Observability and monitoring with Prometheus & Grafana
+
+
+
+---
+
+🔮 Future Improvements
+
+Possible enhancements for this system:
+
+Deploy using managed Kubernetes (EKS)
+
+implement auto-scaling policies
+
+integrate Helm charts for deployment
+
+implement centralized logging (ELK stack)
+
+
+
+---
+
+👨‍💻 Author
+
+Shreyas Neelaraddi
+Cloud / DevOps Engineer
+
+GitHub: https://github.com/ShreyasVN
