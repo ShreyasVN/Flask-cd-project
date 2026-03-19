@@ -1,3 +1,5 @@
+---
+
 # Enterprise CI/CD Pipeline & Kubernetes Deployment on AWS
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
@@ -6,84 +8,47 @@
 ![Terraform](https://img.shields.io/badge/terraform-v1.4-purple)
 ![AWS](https://img.shields.io/badge/AWS-Cloud_Infrastructure-orange)
 
-A production-oriented DevOps pipeline that automates the build, test, containerization, and deployment of a Python Flask application onto a Kubernetes cluster hosted on AWS.  
-This project demonstrates **Infrastructure as Code (IaC), container orchestration, CI/CD automation, and system observability**.
+A production-oriented DevOps pipeline that automates the build, test, containerization, and deployment of a Python Flask application onto a Kubernetes cluster hosted on AWS.
+
+This project demonstrates **Infrastructure as Code (IaC), container orchestration, CI/CD automation, and system observability**, with support for managed database integration (AWS RDS).
 
 ---
 
-# 🏗 Architecture Overview
+## 🏗 Architecture & Workflow
 
-This system implements a **complete DevOps lifecycle** from code commit to monitored deployment.
+This system implements a complete DevOps lifecycle from code commit to monitored deployment.
 
-### Pipeline Workflow
+### 🔄 CI/CD Pipeline Flow
 
-Developer Push (GitHub) 
-↓ 
-Jenkins Pipeline Trigger 
-↓ 
-Code Quality Checks (Lint + Tests) 
-↓ 
-Docker Image Build 
-↓ 
-Push to Container Registry 
-↓ 
-Terraform Provision AWS Infrastructure 
-↓ 
-Ansible Configure Kubernetes Nodes 
-↓ 
-Kubernetes Deployment (Rolling Update) 
-↓ 
-Prometheus Metrics Collection 
-↓ 
-Grafana Monitoring Dashboard
-
-This workflow ensures **fully automated deployments with minimal manual intervention**.
+1. **Developer Push** → Code pushed to GitHub repository  
+2. **Jenkins Trigger** → Pipeline automatically initiates  
+3. **Continuous Integration** → Code quality checks, linting, and testing  
+4. **Containerization** → Docker image built and pushed to registry  
+5. **Infrastructure Provisioning (IaC)** → Terraform provisions AWS EC2 infrastructure  
+6. **Configuration Management** → Ansible configures servers and Kubernetes nodes  
+7. **Deployment** → Kubernetes performs rolling updates  
+8. **Monitoring** → Prometheus & Grafana track system performance  
 
 ---
 
-# ☁ Infrastructure as Code Strategy
+## ⚙️ Tech Stack & Implementation
 
-The infrastructure follows a **code-first immutable infrastructure approach**.
-
-### Terraform
-Terraform is used to provision AWS infrastructure:
-
-- EC2 instances
-- Security groups
-- Networking configuration
-
-### Ansible
-
-Ansible automates server configuration:
-
-- Docker installation
-- Kubernetes cluster setup
-- node configuration
-
-This ensures **consistent infrastructure provisioning across environments**.
-
----
-
-# ⚙ Tech Stack
-
-| Domain | Technology | Implementation |
-|------|-------------|----------------|
-| Cloud Provider | AWS | EC2, Security Groups |
-| Infrastructure as Code | Terraform | Cloud resource provisioning |
-| Configuration Management | Ansible | Server configuration |
+| Domain | Technology | Implementation Detail |
+|--------|------------|-----------------------|
+| Cloud Provider | AWS | EC2, Security Groups, VPC |
+| Infrastructure as Code | Terraform | Infrastructure provisioning |
+| Configuration Management | Ansible | Server & Kubernetes setup |
 | Containerization | Docker | Flask app container |
 | Orchestration | Kubernetes | Cluster deployment |
 | CI/CD | Jenkins | Pipeline automation |
-| Monitoring | Prometheus + Grafana | Metrics collection & visualization |
-| Application | Python / Flask | REST API service |
+| Monitoring | Prometheus + Grafana | Metrics & dashboards |
+| Application | Python / Flask | REST API |
 
 ---
 
-# 🚀 Deployment Runbook
+## 🚀 Deployment Runbook
 
 ### 1. Provision Infrastructure
-
-Navigate to the Terraform directory and provision infrastructure.
 
 ```bash
 cd infra/terraform
@@ -91,12 +56,7 @@ terraform init
 terraform plan
 terraform apply -auto-approve
 
-
----
-
 2. Configure Servers
-
-Use Ansible to bootstrap the infrastructure.
 
 cd ../ansible
 ansible-playbook -i inventory.ini playbook.yml
@@ -107,7 +67,7 @@ Docker
 
 Kubernetes dependencies
 
-cluster configuration tools
+Node configurations
 
 
 
@@ -115,106 +75,104 @@ cluster configuration tools
 
 3. Initialize Kubernetes Cluster
 
-Run on the master node:
-
 sudo kubeadm init --pod-network-cidr=10.244.0.0/16
-
-Install the networking layer:
-
 kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
 
 
 ---
 
-☸ Kubernetes Deployment Strategy
+☸️ Kubernetes Deployment Strategy
 
-To ensure high availability and zero downtime, the deployment uses:
-
-Rolling Updates
-
-Gradually replaces pods without stopping the application.
+Rolling Updates → Zero-downtime deployment
 
 Health Probes
 
-Liveness probe detects failing containers
+Liveness → restart failed containers
 
-Readiness probe ensures traffic is routed only to healthy pods
+Readiness → serve traffic only when ready
 
 
-Load Distribution
+Load Distribution → Services balance traffic across pods
 
-Kubernetes services balance traffic across running pods.
 
 
 ---
 
 📊 Observability & Monitoring
 
-Prometheus continuously collects cluster metrics including:
+Prometheus collects:
 
-CPU usage
+CPU & memory usage
 
-memory utilization
+Network traffic
 
-network traffic
-
-application request latency
+Application latency
 
 
 Grafana dashboards visualize:
 
-resource utilization
+Resource utilization
 
-pod health
+Pod health
 
-request throughput
+Request throughput & errors
 
-error rates
-
-
-This enables real-time system visibility and troubleshooting.
 
 
 ---
 
-📂 Project Structure
+📂 Repository Structure
 
 ci-cd-kubernetes-pipeline/
-│
 ├── app/                 # Flask application
-│   └── app.py
-│
 ├── infra/
-│   └── terraform/       # Infrastructure provisioning
-│
-├── ansible/             # Server configuration
-│
+│   └── terraform/       # AWS provisioning
+├── ansible/             # Configuration management
 ├── k8s/                 # Kubernetes manifests
-│
-├── monitoring/          # Prometheus + Grafana configs
-│
-├── Jenkinsfile          # CI/CD pipeline definition
-│
-└── docker/              # Docker configuration
+├── monitoring/          # Prometheus & Grafana configs
+├── Jenkinsfile          # CI/CD pipeline
+└── docker/              # Docker setup
 
 
 ---
 
-📈 Key Learning Outcomes
+✅ What I Actually Implemented
 
-This project demonstrates practical experience with:
+Provisioned AWS EC2 infrastructure using Terraform
 
-Infrastructure as Code using Terraform
+Built CI/CD pipeline using Jenkins
 
-Configuration automation using Ansible
+Containerized Flask application using Docker
 
-Container orchestration using Kubernetes
+Deployed application on Kubernetes cluster
 
-Automated CI/CD pipelines using Jenkins
+Configured Prometheus & Grafana for monitoring
 
-Containerized application deployment with Docker
+Tested rolling deployments and basic fault handling
 
-Observability and monitoring with Prometheus & Grafana
+
+
+---
+
+⚠️ Challenges & Solutions
+
+Kubernetes setup issues during cluster initialization
+→ Resolved networking and kubeadm configuration
+
+Deployment failures due to container misconfiguration
+→ Fixed Docker build process and environment variables
+
+
+
+---
+
+📈 Key Outcomes
+
+Automated end-to-end deployment pipeline
+
+Reduced manual deployment effort
+
+Built scalable and monitored application deployment system
 
 
 
@@ -222,15 +180,13 @@ Observability and monitoring with Prometheus & Grafana
 
 🔮 Future Improvements
 
-Possible enhancements for this system:
+Deploy using AWS EKS
 
-Deploy using managed Kubernetes (EKS)
+Implement auto-scaling
 
-implement auto-scaling policies
+Add centralized logging (ELK stack)
 
-integrate Helm charts for deployment
-
-implement centralized logging (ELK stack)
+Integrate Helm charts
 
 
 
@@ -239,6 +195,8 @@ implement centralized logging (ELK stack)
 👨‍💻 Author
 
 Shreyas Neelaraddi
-Cloud / DevOps Engineer
+Cloud & DevOps Engineer
 
 GitHub: https://github.com/ShreyasVN
+
+---
